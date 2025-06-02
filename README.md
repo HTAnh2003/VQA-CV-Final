@@ -1,4 +1,4 @@
----
+<!-- ---
 license: apache-2.0
 language:
 - vi
@@ -6,7 +6,26 @@ base_model:
 - OpenGVLab/InternVL3-1B
 - 5CD-AI/Vintern-1B-v3_5
 pipeline_tag: visual-question-answering
----
+--- -->
+# VQA-CV-Final
+
+Dự án cuối kỳ môn Thị giác Máy tính (Computer Vision), tập trung vào Visual Question Answering (VQA). Mục tiêu là xây dựng một hệ thống trả lời câu hỏi dựa trên đầu vào là hình ảnh và văn bản.
+
+## Dataset : 
+- https://www.kaggle.com/datasets/tienanh2003/vitextvqa
+- https://huggingface.co/datasets/minhquan6203/ViTextVQA
+
+    Paper của dataset : https://arxiv.org/abs/2404.10652
+
+
+## Training 
+Chi tiết quá trình finetune ở notebook [VQA-CV-Final-Training.ipynb](VQA-CV-Final-Training.ipynb).
+
+
+## Inference 
+
+Checkpoint đã fine tune được lưu tại [TienAnh/Finetune_VQA_1B](https://huggingface.co/TienAnh/Finetune_VQA_1B).
+
 
 ```python
 import numpy as np
@@ -106,7 +125,7 @@ test_image = 'test-image.jpg'
 pixel_values = load_image(test_image, max_num=6).to(torch.bfloat16).cuda()
 generation_config = dict(max_new_tokens= 1024, do_sample=False, num_beams = 3, repetition_penalty=2.5)
 
-question = '<image>\nTrích xuất thông tin chính trong ảnh và trả về dạng markdown.'
+question = '<image>\nvăn bản trong hình ảnh là gì'
 
 response, history = model.chat(tokenizer, pixel_values, question, generation_config, history=None, return_history=True)
 print(f'User: {question}\nAssistant: {response}')
@@ -115,3 +134,13 @@ print(f'User: {question}\nAssistant: {response}')
 #response, history = model.chat(tokenizer, pixel_values, question, generation_config, history=history, return_history=True)
 #print(f'User: {question}\nAssistant: {response}')
 ```
+## Evaluation
+Link submit đánh giá :
+- [EM](https://www.kaggle.com/competitions/ViTextVQA-evaluation)
+- [F1](https://www.kaggle.com/competitions/ViTextVQA-F1-evaluation)
+
+## Reference
+- [InternVL3](https://huggingface.co/OpenGVLab/InternVL3-1B)
+- [Vintern](https://huggingface.co/5CD-AI/Vintern-1B-v3_5)
+- [Dataset ViTextVQA](https://arxiv.org/abs/2404.10652)
+
